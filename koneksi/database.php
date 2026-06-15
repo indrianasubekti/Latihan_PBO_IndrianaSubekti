@@ -4,7 +4,7 @@ class Database {
     private $host = "localhost";
     private $username = "root";
     private $password = "";
-    private $database = "db_bioskop"; // Disesuaikan dengan database bioskop baru Anda
+    private $database = "DB_LATIHAN_PBO_TI1C_INDRIANASUBEKTI"; // Disesuaikan dengan database bioskop baru Anda
     public $conn;
 
     public function __construct() {
@@ -15,4 +15,6 @@ class Database {
         }
     }
 }
+// Menguji koneksi dengan membuat objek dari kelas Database
+$db = new Database();
 ?>
