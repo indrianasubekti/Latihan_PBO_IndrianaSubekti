@@ -13,6 +13,9 @@ class Database {
         if ($this->conn->connect_error) {
             die("Koneksi gagal: " . $this->conn->connect_error);
         }
+
+        // Menampilkan pesan sukses jika berhasil terhubung
+        echo "Koneksi Berhasil! Terhubung dengan basis data '" . $this->database . "' menggunakan konsep OOP.<br>";
     }
 }
 // Menguji koneksi dengan membuat objek dari kelas Database
