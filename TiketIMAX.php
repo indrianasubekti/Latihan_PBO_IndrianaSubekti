@@ -2,29 +2,43 @@
 require_once 'Tiket.php';
 
 class TiketIMAX extends Tiket {
-    // Properti tambahan spesifik untuk TiketIMAX
     private $kacamata3dId;
     private $efekGerakFitur;
 
-    // Constructor Kelas Anak
     public function __construct($id_tiket, $nama_film, $jadwal_tayang, $jumlah_kursi, $HargaDasarTiket, $kacamata3dId, $efekGerakFitur) {
         parent::__construct($id_tiket, $nama_film, $jadwal_tayang, $jumlah_kursi, $HargaDasarTiket);
-        
         $this->kacamata3dId = $kacamata3dId;
         $this->efekGerakFitur = $efekGerakFitur;
     }
 
-    // Mengimplementasikan metode abstrak hitungTotalHarga
-    public function hitungTotalHarga() {
-        // Contoh Overriding: Studio IMAX dikenakan biaya tambahan Rp 25.000 per kursi untuk efek gerak & kacamata 3D
-        $biayaTambahan = 25000 * $this->jumlah_kursi;
-        return ($this->HargaDasarTiket * $this->jumlah_kursi) + $biayaTambahan;
+    // Mengambil data spesifik dari database untuk studio IMAX
+    public static function ambilData() {
+        $db = new Database();
+        $sql = "SELECT id_tiket, nama_film, jadwal_tayang, jumlah_kursi, harga_dasar_tiket, kacamata_3d_id, efek_gerak_fitur 
+                FROM tabel_tiket WHERE jenis_studio = 'IMAX'";
+        
+        $result = $db->conn->query($sql);
+        $daftar = [];
+
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $daftar[] = new self(
+                    $row['id_tiket'], $row['nama_film'], $row['jadwal_tayang'], 
+                    $row['jumlah_kursi'], $row['harga_dasar_tiket'], 
+                    $row['kacamata_3d_id'], $row['efek_gerak_fitur']
+                );
+            }
+        }
+        return $daftar;
     }
 
-    // Mengimplementasikan metode abstrak tampilkanInfoFasilitas
+   
+    public function hitungTotalHarga() {
+        // Menggunakan tarif murni
+        return $this->HargaDasarTiket * $this->jumlah_kursi;
+    }
+
     public function tampilkanInfoFasilitas() {
-        $kacamata = $this->kacamata3dId ? $this->kacamata3dId : "Tidak Ada / Tidak Pakai";
-        return "Studio: IMAX | Kacamata ID: " . $kacamata . " | Efek Gerak: " . $this->efekGerakFitur;
+        return "Studio: IMAX | Kacamata ID: " . ($this->kacamata3dId ?? '-') . " | Efek Gerak: " . $this->efekGerakFitur;
     }
 }
-?>

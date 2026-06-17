@@ -2,28 +2,43 @@
 require_once 'Tiket.php';
 
 class TiketRegular extends Tiket {
-    // Properti tambahan spesifik untuk TiketRegular
     private $tipeAudio;
     private $lokasiBaris;
 
-    // Constructor Kelas Anak
     public function __construct($id_tiket, $nama_film, $jadwal_tayang, $jumlah_kursi, $HargaDasarTiket, $tipeAudio, $lokasiBaris) {
-        // Mengirimkan data global ke constructor abstract class Tiket
         parent::__construct($id_tiket, $nama_film, $jadwal_tayang, $jumlah_kursi, $HargaDasarTiket);
-        
         $this->tipeAudio = $tipeAudio;
         $this->lokasiBaris = $lokasiBaris;
     }
 
-    // Mengimplementasikan metode abstrak hitungTotalHarga
+    // Mengambil data spesifik dari database untuk studio Regular
+    public static function ambilData() {
+        $db = new Database();
+        $sql = "SELECT id_tiket, nama_film, jadwal_tayang, jumlah_kursi, harga_dasar_tiket, tipe_audio, lokasi_baris 
+                FROM tabel_tiket WHERE jenis_studio = 'Regular'";
+        
+        $result = $db->conn->query($sql);
+        $daftar = [];
+
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $daftar[] = new self(
+                    $row['id_tiket'], $row['nama_film'], $row['jadwal_tayang'], 
+                    $row['jumlah_kursi'], $row['harga_dasar_tiket'], 
+                    $row['tipe_audio'], $row['lokasi_baris']
+                );
+            }
+        }
+        return $daftar;
+    }
+
+
     public function hitungTotalHarga() {
-        // Studio Regular menggunakan tarif standar (Harga Dasar x Jumlah Kursi)
+        // menggunakan tarif murni
         return $this->HargaDasarTiket * $this->jumlah_kursi;
     }
 
-    // Mengimplementasikan metode abstrak tampilkanInfoFasilitas
-    public function tampilkanInfoFasilitas() {
-        return "Studio: Regular | Audio: " . $this->tipeAudio . " | Kursi: " . $this->lokasiBaris;
+public function tampilkanInfoFasilitas() {
+        return "Studio: Regular | Audio: " . $this->tipeAudio . " | Baris: " . $this->lokasiBaris;
     }
 }
-?>
