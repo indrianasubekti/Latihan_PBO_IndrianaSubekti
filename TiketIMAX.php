@@ -32,10 +32,10 @@ class TiketIMAX extends Tiket {
         return $daftar;
     }
 
-   
+    // Method Overriding dari kelas induk (Tiket)
     public function hitungTotalHarga() {
-        // Menggunakan tarif murni
-        return $this->HargaDasarTiket * $this->jumlah_kursi;
+       // Total harga dasar + biaya flat IMAX Rp 35.000
+       return ($this->HargaDasarTiket * $this->jumlah_kursi) + 35000;
     }
 
     public function tampilkanInfoFasilitas() {

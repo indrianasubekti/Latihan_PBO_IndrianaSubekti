@@ -34,8 +34,8 @@ class TiketVelvet extends Tiket {
 
     // Method Overriding dari kelas induk (Tiket)
     public function hitungTotalHarga() {
-        // Menggunakan tarif murni
-        return $this->HargaDasarTiket * $this->jumlah_kursi;
+        // Surcharge kelas premium sebesar 50% dari total harga dasar
+       return ($this->HargaDasarTiket * $this->jumlah_kursi) * 1.50;
     }
 
     public function tampilkanInfoFasilitas() {

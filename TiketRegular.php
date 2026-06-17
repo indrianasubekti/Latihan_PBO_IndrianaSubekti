@@ -32,9 +32,9 @@ class TiketRegular extends Tiket {
         return $daftar;
     }
 
-
+    // Method Overriding dari kelas induk (Tiket)
     public function hitungTotalHarga() {
-        // menggunakan tarif murni
+        // Tarif standar murni tanpa biaya tambahan
         return $this->HargaDasarTiket * $this->jumlah_kursi;
     }
 
